@@ -1,31 +1,24 @@
 #include <iostream>
+#include <string>
 
+static int t = 0;
 
-struct Stack {
-    int data;
-    enum { FIRST = 50, SECOND };
-    Stack() : data(FIRST) {}
-    Stack(int i) : data(i) {}
-    void printer() { std::cout << "Non-const stack data = " << data << "\n"; }
-    void printer() const { std::cout << "stack data = " << data << "\n"; }
-    const struct Stack& create() { struct Stack* s1  = new struct Stack(); struct Stack& s2 = *s1; return s2; }
-    const struct Stack& create(int i) { struct Stack* s1  = new struct Stack(i); struct Stack& s2 = *s1; return s2; }
-};
-
-typedef Stack& stack;
-
-char* Function1() { 
-return "Some text\n"; 
-}
+struct Foo{
+    int _x, _y;
+    int& _r = t;
+    Foo& operator=(int x) { _x = x; return *this;}
+    friend std::ostream& operator<<(std::ostream& os, const Foo& f);
+} ss;
 
 int main(int argc, char const *argv[])
 {
-    Function1();
-    struct Stack s1(4444);
-    s1.printer();
-
-    const struct Stack& s2 = s1.create(222333);
-    s2.printer();
+    Foo f{3,4};
+    std::cout << f;
     return 0;
 }
 
+
+std::ostream& operator<<(std::ostream& os, const Foo& f) { 
+    os << f._x << "\t" << f._y << "\t" << f._r << "\n";
+    return os;
+}
