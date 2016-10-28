@@ -1,8 +1,8 @@
 GCC=g++
 CFLAGS=-g -Wall -std=c++14
 TARGET=main
-SOURCES:=main.cpp test.cpp
-DEPS:=headers.h
+SOURCES:=main.cpp
+DEPS:=test.h
 # Math libraries
 # MATH:=-lm
 OBJECTS:=$(SOURCES:.cpp=.o)
@@ -18,7 +18,8 @@ all: $(OBJECTS)
 
 .PHONY:
 test: test.o
-	$(GCC) $(CFLAGS) test.o -o test
+	$(GCC) $(CFLAGS) test.o -o test 
+	@./test
 
 .PHONY: clean
 clean:

@@ -1,42 +1,30 @@
-#include <iostream>
-#include <vector>
 #include "test.h"
+#include <iostream>
 #include <string>
-#include <memory>
-#include <utility>
 
-struct A {
-    A(int&& n) { std::cout << "rvalue overload  n = " << n << "\n"; }
-    A(int& n) { std::cout << "lvalue overload  n = " << n << "\n"; }
-    A(const int& n) { std::cout << "const n overload "; }
-};
+namespace Chrono {
+    enum class Month { jan=1, feb, mar, apr, may, jun, jul, aug, sep,oct,nov, dec };
+    class Date {
+    public:
+        class Bad_date{}; // exception class
+        explicit Date(int dd={}, Month mm={}, int yy={}) : d{dd}, y{yy} {m = (int)mm; };
+        int day() const { return d; }
+        int year() const { return y; }
+        void printer() const { std::cout << d << " " << (int)m << " " << y << '\n'; }
 
-class B {
-public:
-    template<class T1>
-    B(T1&& t1) :
-        a1_{std::forward<T1>(t1)} {}
-private:
-    A a1_;
-};
-
-template<typename T>
-using C = std::vector<T>;
+        Date& add_year() { ++y; return *this; }
+        Date& add_day() { ++d; return *this; }
+        Date& add_month() {   return *this; }
+    private:
+        bool is_valid();
+        int d,m, y;
+    };
+} // Chrono 
 
 int main(int argc, char const *argv[])
 {
-    using A = std::allocator<int>;
-    int* elem;
-    A alloc;
-    elem = alloc.allocate(10);
-
-    int x=10; 
-    C<int> b = {1,2,3,4};
-    std::cout << b.capacity() << "\n";
-    b.reserve(20);
-    std::cout << b.capacity() << "\n";
-    b.shrink_to_fit();
-    std::cout << b.capacity() << "\n";
+    Chrono::Month jan = Chrono::Month::jan;
+    Chrono::Date d{1,jan,2016};
     return 0;
 }
 

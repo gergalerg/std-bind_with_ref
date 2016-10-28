@@ -1,7 +1,7 @@
 GCC=g++
-CFLAGS=-g -Wall -std=c++14
+CFLAGS=-g -Wall -std=c++14 -fpermissive
 TARGET=main
-SOURCES:=main.cpp test.cpp
+SOURCES:=main.cpp 
 DEPS:=headers.h
 # Math libraries
 # MATH:=-lm
@@ -19,6 +19,7 @@ all: $(OBJECTS)
 .PHONY:
 test: test.o
 	$(GCC) $(CFLAGS) test.o -o test
+	@./test
 
 .PHONY: clean
 clean:
