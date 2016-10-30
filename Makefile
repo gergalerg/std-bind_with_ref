@@ -1,11 +1,12 @@
 GCC=g++
-CFLAGS=-g -Wall -std=c++14
+CFLAGS=-g -Wall -std=c++14 
 TARGET=main
 SOURCES:=main.cpp
 DEPS:=test.h
 # Math libraries
 # MATH:=-lm
 OBJECTS:=$(SOURCES:.cpp=.o)
+
 
 %.o: %.cpp
 	@echo "Making objects! Input = " $< "OUtput = " $@
