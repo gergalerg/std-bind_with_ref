@@ -1,16 +1,15 @@
-#include "test.h"
 #include <iostream>
-#include <string>
-#include <deque>
+#include <vector>
+
+enum State {empty, nought, cross };
 
 int main(int argc, char const *argv[])
 {
-    std::deque<int> d(5);
-    std::cout << d.size() << "\n";
+    std::vector<State> pos;
+    pos.push_back(cross);
+    pos.push_back(nought);
+    pos.push_back(empty);
 
-    for (int i=0; i < 10;i++)
-        d.push_front(i);
-    std::cout << d.size() << "\n";
+    for (auto x: pos) std::cout << (int)x << "\n";
     return 0;
 }
-
