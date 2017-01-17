@@ -1,15 +1,14 @@
-#include <iostream>
-#include <vector>
-#include <utility>
-#include <string>
-#include <typeinfo>
-#include <map>
+#include "test.h"
 
-
+std::unique_ptr<Ival_box> create() { 
+    std::unique_ptr<Ival_box> p1 { new Ival_slider{0,5}};
+    return p1;
+};
 int main(int argc, char const *argv[])
 {
-    std::map<char, int> mymap{};
-
-
+    std::unique_ptr<Ival_box> p1 = create();
+    p1->prompt();
+    std::cout << std::boolalpha;
+    std::cout << p1->was_changed() <<'\n';
+    return 0;
 }
-

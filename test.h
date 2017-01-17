@@ -3,34 +3,32 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
+#include <future>
 
-namespace Lexer {
-    enum class Kind : char {
-        name=66, number, end, plus='='
+#include "test.tpp"
 
-    };
-    struct Token {
-        Kind kind;
-        std::string string_value;
-        double number_value;
-    };
-    class Token_stream {
-    public:
-        Token_stream(std::istream s) {}
-        Token_stream(std::istream* p) {}
-        Token_stream() : ct{Kind::name } {}
-        ~Token_stream() { close(); }
+class Ival_box {
+protected:
+    int val;
+    int low, high;
+    bool changed{false};
+public:
+    Ival_box(int ll, int hh) : val{ll}, low{ll}, high{hh}{}
+    Ival_box():val{0}, low{0}, high{10} {}
 
-        Kind get() { return ct.kind; };
-        Token& current();
+    virtual int get_value() { changed=false; return val;}
+    virtual void set_value(int i) { changed=true; val=i;}
+    virtual void reset_value(int i) { changed=false; val=i;}
+    virtual void prompt() {std::cout << "Enter a number: "; std::cin >> val; set_value(val);}
+    virtual bool was_changed() const { return changed; }
 
-    private:
-    void close() { if (owns) delete ip;} 
+    virtual ~Ival_box() {}
+};
 
-    std::istream* ip;
-    bool owns; 
-    Token ct { Kind::end };
-    };
-    extern Token_stream ts; 
-}
+class Ival_slider : public Ival_box{
+public:
+    Ival_slider() { Ival_box(); }
+    Ival_slider(int ii, int jj) : Ival_box{ii, jj} {}
+};
 #endif

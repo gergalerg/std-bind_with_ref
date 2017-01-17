@@ -3,14 +3,14 @@ CFLAGS=-g -Wall -std=c++14
 TARGET=main
 SOURCES:=main.cpp
 DEPS:=test.h
-THREAD:=-lpthread
 # Math libraries
 # MATH:=-lm
 OBJECTS:=$(SOURCES:.cpp=.o)
 
 
 %.o: %.cpp
-	$(GCC) $(CFLAGS) -c $< -o $@ $(THREAD)
+	@echo "Making objects! Input = " $< "OUtput = " $@
+	$(GCC) $(CFLAGS) -c $< -o $@
 
 .PHONY: all
 all: $(OBJECTS)
@@ -18,9 +18,10 @@ all: $(OBJECTS)
 	@./main
 
 .PHONY:
-test:  test.o
-	$(GCC) $(CFLAGS) $< -o test $(THREAD)  
+test: test.o
+	$(GCC) $(CFLAGS) test.o -o test 
+	@./test
 
 .PHONY: clean
 clean:
-	rm $(TARGET) $(OBJECTS) test test.o
+	rm $(TARGET) $(OBJECTS)
