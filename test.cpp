@@ -16,47 +16,33 @@ template <typename T>
 void print(T&& t) {
     std::cout << typeid(t).name() << '\n';
 }
-struct A {
-    A() = delete;
-    A(int _m) : m(_m) { std::cout << "A(int) called\n"; }
-    virtual void read() = 0;
+
+class Window {
+public:
+    virtual void draw();
+};
+
+class Window_with_menu : public Window {
 protected:
-    int m;
-
-    A(A&) = delete;
-    A& operator=(const A&) = delete;
-};
-
-class Trans : public virtual A {
+    void own_draw() { std::cout << "Window_with_menu::own_draw()\n"; }
 public:
-    Trans() = delete;
-    Trans(int i) : A{i} {}
-    void read() override { std::cout << "m = " << m << '\n'; } 
+    Window_with_menu() = default;
+    Window_with_menu(const Window_with_menu&) { std::cout << "Move op called\n"; }
+    void draw() override { Window::draw(); own_draw(); }
 };
 
-class Receiver : public virtual A {
-public:
-    Receiver() = delete;
-    Receiver(int i) : A{i} { std::cout << "Receiver(int) called\n"; }
-    void read() override { std::cout << "Rec::m = " << m << '\n'; }
-};
+void Window::draw() {std::cout << "Window::draw()\n"; }
 
-class Radio : public Trans, public Receiver {
-public:
-    /*
-    using Trans::Trans;
-    using Receiver::Receiver;
-    */
-    Radio() : A{0}, Trans{0}, Receiver{0} {}
-    Radio(int i) : A{i}, Trans{0}, Receiver{0} {}
-    void read() override final { std::cout << "Radio::m = " << m << '\n';}
-};
-
+void caller(Window& w) {
+    w.draw();
+}
+auto operator"" _s(const char* c) {
+    return c;
+}
 int main(int argc, char const *argv[])
 {
-    Radio r(10);
-    r.read();
-
+    Window_with_menu m;
+    caller(m);
     return 0;
 }
 
