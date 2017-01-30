@@ -1,8 +1,8 @@
 GCC=g++
 CFLAGS=-g -Wall -std=c++14
 TARGET=main
-SOURCES:=main.cpp
-DEPS:=test.h
+SOURCES:=main.cpp test.cpp
+DEPS:=test.h test.tpp
 THREAD:=-lpthread
 # Math libraries
 # MATH:=-lm
@@ -14,7 +14,7 @@ OBJECTS:=$(SOURCES:.cpp=.o)
 
 .PHONY: all
 all: $(OBJECTS)
-	$(GCC) $(CFLAGS) $(OBJECTS) -o $(TARGET) 
+	$(GCC) $(CFLAGS) $(OBJECTS) -o $(TARGET) $(THREAD)
 	@./main
 
 .PHONY:
@@ -23,4 +23,4 @@ test:  test.o
 
 .PHONY: clean
 clean:
-	rm $(TARGET) $(OBJECTS) test test.o
+	rm $(TARGET) $(OBJECTS) 
