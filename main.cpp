@@ -1,48 +1,25 @@
 #include "test.h"
 #include <vector>
 #include <utility>
-void do_something(Shape& s1, Shape& s2)
-{
-    if (s1.intersect(s2)) {
-        std::cout << "They intersect!\n"; 
-    } else {
-        std::cout << "They don't intersect!\n";
-    }
+
+void foo(Node* n, Visitor* v) {
+    std::vector<std::pair<Node*, Visitor*>> vn { { n, v}, {n,v}, {n,v} };
+    for (auto x : vn)
+        x.first->accept(*x.second);
 }
 
-void test(Triangle& t, Circle& c) {
-    std::vector<std::pair<Shape*, Shape*>> vs{ {&t,&t}, {&t,&c}, {&c,&t}, {&c,&c}  };
-    for (auto p :vs)
-        do_something(*p.first, *p.second);
-}
-
-struct AA {
-    virtual void Show() const {std::cout << "AA::Show called\n"; }
-};
-
-struct BB : AA {
-    void Show() const {std::cout << "BB::Show called\n"; }
-};
-
-struct CC : BB {
-    void Show() const { std::cout << "CC::Show called\n"; }
-};
-
-
-void foo(AA& a, AA& b) 
-{
-    if (typeid(a) == typeid(b))
-        std::cout << "They're equal!\n";
-    else
-        std::cout << "They're not\n";
-}
 int main(int argc, char const *argv[])
 {
-    CC cc;
-    CC c2;
+    Expr* e = new Expr{}; 
+    Stmt* s = new Stmt{};
+    Do1_visitor* d1 = new Do1_visitor{};
+    Do2_visitor* d2 = new Do2_visitor{};
+
+    foo(e, d1);
+    foo(e, d2);
     BB bb;
-    foo(bb, cc); 
-    foo(cc, c2);
+    BB bb2 = static_cast<BB&&>(bb);
+    bb.show();
 
     return 0;
 }
