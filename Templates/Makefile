@@ -1,8 +1,8 @@
 GCC=g++
 CFLAGS=-g -Wall -std=c++14
 TARGET=main
-SOURCES:=main.cpp test.cpp
-DEPS:=test.h test.tpp
+SOURCES:=main.cpp 
+DEPS:=string.h
 THREAD:=-lpthread
 # Math libraries
 # MATH:=-lm
