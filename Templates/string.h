@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <type_traits>
+#include <memory>
 
 template <typename C>
 class String {

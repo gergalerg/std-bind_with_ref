@@ -4,56 +4,57 @@
 #include <string>
 #include <iostream>
 #include <typeinfo>
+#include <memory>
 
-class Visitor;
 
-class Node {
+template <typename T, typename Alloc>
+class List; 
+
+template <typename T>
+class Link {
+    template <typename U, typename A>
+    friend class List;
+    T val;
+    Link* succ;
+    Link* prev;
+};
+
+template<typename T>
+class Iterator {
+    Link<T>* curr_pos;
+};
+
+template <typename T, typename Alloc>
+class List {
 public:
-    virtual void accept(Visitor&) = 0;
+    Iterator<T> begin();
+    Iterator<T> end();
 };
 
-class Expr : public Node {
+template<typename T, typename Alloc>
+Iterator<T> List<T, Alloc>::begin() {auto p = new Iterator<T>{}; return *p;}
+
+template<typename T, typename Alloc>
+Iterator<T> List<T, Alloc>::end() {auto p  = new Iterator<T>{}; return *p;}
+
+template <typename T>
+class Vector;
+
+template <typename T>
+Vector<T> operator*(const Vector<T>& m, const Vector<T>& v) {
+    std::cout<< "Friend func called vector\n";
+    Vector<T> r;
+    return r;
+}
+template <typename T>
+class Vector {
 public:
-    void accept(Visitor&) override;
+    Vector() = default;
+    Vector(const Vector&) {std::cout << "Copy called\n";}
+    Vector<T>& operator=(Vector<T> o) { std::cout << "Copy assign called\n"; return o;}
+    friend Vector<T> operator*<>(const Vector<T>& m, const Vector<T>& v);
 };
 
-class Stmt : public Node {
-public:
-    void accept(Visitor&) override;
-};
-
-class Visitor {
-public:
-    virtual void accept(Expr&) = 0;
-    virtual void accept(Stmt&) = 0;
-};
-
-class Do1_visitor : public Visitor {
-    void accept(Expr&) { std::cout << "do1 to Expr\n"; }
-    void accept(Stmt&) { std::cout << "do1 to Stmt\n"; }
-};
-
-class Do2_visitor : public Visitor {
-    void accept(Expr&) { std::cout << "do2 to Expr\n"; }
-    void accept(Stmt&) { std::cout << "do2 to Stmt\n"; }
-};
-
-class AA {
-protected:
-public:
-    virtual void show() const = 0;
-};
-
-class BB : public AA {
-    int data;
-   public:
-   BB() : data{1}  { } 
-   BB(BB& b) { std::cout << "BB& b called\n"; }
-   BB(const BB& b) { std::cout << "const BB& b called\n"; }
-   BB(BB&& b) { std::cout << "Move called\n";  }
-   void show() const { std::cout << data << " \n";}
-};
 #include "test.tpp"
-
 
 #endif
